@@ -5,7 +5,6 @@ public class P_TestTask : PrimitiveTask
 {
     public P_TestTask(float duration)
     {
-        this._startTime = -1;
         this._duration = duration;
     }
 
@@ -24,12 +23,14 @@ public class P_TestTask : PrimitiveTask
         if (_startTime < 0)
         {
             _startTime = Time.time;
-            Debug.Log("开始测试...");
+            Debug.Log("开始执行测试任务... ");
         }
 
         if (Time.time - _startTime >= this._duration)
         {
-            Debug.Log($"完成{this._duration}秒测试");
+            Debug.Log($"完成{this._duration}秒测试 ");
+            // 重置开始时间
+            _startTime = -1;
             return EStatus.Success;
         }
         return EStatus.Running; // 持续中

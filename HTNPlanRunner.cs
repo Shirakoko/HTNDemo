@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class HTNPlanRunner
 {
     //当前运行状态
@@ -25,6 +27,7 @@ public class HTNPlanRunner
         } else if(curState == EStatus.Success)
         {
             //如果当前运行状态是成功，就表示当前任务完成了，让当前原子任务造成影响
+            Debug.Log($"任务{curTask.GetTaskName()}执行成功，将对世界状态造成影响");
             curTask.Effect();
         }
         /*如果当前状态不是「正在执行/EStatus.Running」，就取出新一个原子任务作为当前任务
@@ -36,8 +39,14 @@ public class HTNPlanRunner
             //用Pop的返回结果判断规划器的FinalTasks是否为空
             canContinue = planner.FinalTasks.TryPop(out curTask);
         }
-        /*如果canContinue为false，那curTask会为null也视作失败（其实应该是「全部
-        完成」，但全部完成和失败是一样的，都要重新规划）。所以只有当canContinue && curTask.MetCondition()都满足时，才读取当前原子任务的运行状态，否则就失败。*/
-        curState = canContinue && curTask.MetCondition() ? curTask.Operator() : EStatus.Failure;
+
+        /*如果canContinue为false（即curTask为null）也视作失败（其实是「全部完成」，但全部完成和失败是一样的，都要重新规划）。
+        只有当canContinue && curTask.MetCondition()都满足时，才读取当前原子任务的运行状态，否则就失败。*/
+        if (canContinue && curTask != null)
+        {
+            curState = curTask.MetCondition() ? curTask.Operator() : EStatus.Failure;
+        } else {
+            curState = EStatus.Failure;
+        }
     }
 }

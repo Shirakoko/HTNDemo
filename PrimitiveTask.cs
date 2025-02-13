@@ -6,7 +6,7 @@ public abstract class PrimitiveTask : IBaseTask
 {
     protected float _startTime = -1f;
     protected float _duration = 0.0f;
-    
+
     public abstract string GetTaskName();
     //原子任务不可以再分解为子任务，所以AddNextTask方法不必实现
     void IBaseTask.AddNextTask(IBaseTask nextTask)

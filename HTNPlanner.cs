@@ -20,7 +20,6 @@ public class HTNPlanner
     //规划（核心）
     public void Plan()
     {
-        Debug.Log("开始计划...");
         //先复制一份世界状态
         var worldState = HTNWorld.CopyWorldState();
         //将存储列表清空，避免上次计划结果的影响
@@ -59,6 +58,6 @@ public class HTNPlanner
         }
         // 将所有任务名称拼接成一行
         string taskNames = string.Join(", ", FinalTasks.Select(task => task.GetTaskName()));
-        Debug.Log($"计划完毕：队列中的任务有: {taskNames}");
+        Debug.Log($"计划完毕，队列中的任务有: {taskNames}");
     }
 }
