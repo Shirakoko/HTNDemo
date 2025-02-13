@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class P_Eat : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "吃饭";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int full = HTNWorld.GetWorldState<int>("_full");
@@ -29,7 +34,7 @@ public class P_Eat : PrimitiveTask
         int mood = HTNWorld.GetWorldState<int>("_mood");
 
         // 确保 _full 和 _mood 不超过最大值 10
-        HTNWorld.UpdateState("_full", Math.Min(full + 1, 10));
+        HTNWorld.UpdateState("_full", Math.Min(full + 2, 10));
         HTNWorld.UpdateState("_mood", Math.Min(mood + 1, 10));
     }
 
@@ -39,7 +44,7 @@ public class P_Eat : PrimitiveTask
         int mood = (int)worldState["_mood"];
 
         // 确保 _full 和 _mood 不超过最大值 10
-        worldState["_full"] = Math.Min(full + 1, 10);
+        worldState["_full"] = Math.Min(full + 2, 10);
         worldState["_mood"] = Math.Min(mood + 1, 10);
     }
 }

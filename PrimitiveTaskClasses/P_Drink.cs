@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class P_Drink : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "喝水";
+    }
+
+    // 无条件
     protected override bool MetCondition_OnRun() => true; // 无条件
 
     protected override bool MetCondition_OnPlan(Dictionary<string, object> worldState) => true; // 无条件

@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class P_ChaseCock : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "追蟑螂";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int energy = HTNWorld.GetWorldState<int>("_energy");
-        return energy >= 7; // 追蟑螂条件：精力值 >= 7
+        return energy >= 5; // 追蟑螂条件：精力值 >= 5
     }
 
     protected override bool MetCondition_OnPlan(Dictionary<string, object> worldState)
     {
         int energy = (int)worldState["_energy"];
-        return energy >= 7; // 规划时条件：精力值 >= 7
+        return energy >= 5; // 规划时条件：精力值 >= 5
     }
 
     public override EStatus Operator()

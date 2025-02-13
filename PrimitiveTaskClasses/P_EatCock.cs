@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class P_EatCock : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "吃蟑螂";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int full = HTNWorld.GetWorldState<int>("_full");
-        return full <= 3; // 吃蟑螂条件：饱腹值 <= 3
+        return full <= 7; // 吃蟑螂条件：饱腹值 <= 7
     }
 
     protected override bool MetCondition_OnPlan(Dictionary<string, object> worldState)
     {
         int full = (int)worldState["_full"];
-        return full <= 3; // 规划时条件：饱腹值 <= 3
+        return full <= 7; // 规划时条件：饱腹值 <= 7
     }
 
     public override EStatus Operator()

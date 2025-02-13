@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class P_Poop : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "拉屎";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int full = HTNWorld.GetWorldState<int>("_full");
@@ -26,18 +31,22 @@ public class P_Poop : PrimitiveTask
     protected override void Effect_OnRun()
     {
         int full = HTNWorld.GetWorldState<int>("_full");
+        int mood = HTNWorld.GetWorldState<int>("_mood");
 
         // 确保 _full 不低于最小值 0
         HTNWorld.UpdateState("_full", Math.Max(full - 2, 0));
+        HTNWorld.UpdateState("_mood", Math.Max(mood - 2, 0));
         HTNWorld.UpdateState("_masterBeside", false);
     }
 
     protected override void Effect_OnPlan(Dictionary<string, object> worldState)
     {
         int full = (int)worldState["_full"];
+        int mood = (int)worldState["_mood"];
 
         // 确保 _full 不低于最小值 0
         worldState["_full"] = Math.Max(full - 2, 0);
+        worldState["_mood"] = Math.Max(mood - 2, 0);
         worldState["_masterBeside"] = false;
     }
 }

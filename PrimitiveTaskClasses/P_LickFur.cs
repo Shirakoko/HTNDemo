@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class P_LickFur : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "舔毛";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int mood = HTNWorld.GetWorldState<int>("_mood");

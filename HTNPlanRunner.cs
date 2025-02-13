@@ -22,20 +22,18 @@ public class HTNPlanRunner
         {
             //就规划一次
             planner.Plan();
-        }
-        //如果当前运行状态是成功，就表示当前任务完成了
-        if(curState == EStatus.Success)
+        } else if(curState == EStatus.Success)
         {
-            //让当前原子任务造成影响
+            //如果当前运行状态是成功，就表示当前任务完成了，让当前原子任务造成影响
             curTask.Effect();
         }
-        /*如果当前状态不是「正在执行」，就取出新一个原子任务作为当前任务
+        /*如果当前状态不是「正在执行/EStatus.Running」，就取出新一个原子任务作为当前任务
         无论失败还是成功，都要这么做。因为如果是失败，肯定在代码运行到这
         之前，已经进行了一次规划，理应获取新规划出的任务来运行；如果是因
         为成功，那也要取出新任务来运行*/
         if(curState != EStatus.Running)
         {
-            //用TryPop的返回结果判断规划器的FinalTasks是否为空
+            //用Pop的返回结果判断规划器的FinalTasks是否为空
             canContinue = planner.FinalTasks.TryPop(out curTask);
         }
         /*如果canContinue为false，那curTask会为null也视作失败（其实应该是「全部

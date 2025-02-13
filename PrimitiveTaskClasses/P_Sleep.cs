@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class P_Sleep : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "睡觉";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int energy = HTNWorld.GetWorldState<int>("_energy");
@@ -29,7 +34,7 @@ public class P_Sleep : PrimitiveTask
         int mood = HTNWorld.GetWorldState<int>("_mood");
 
         // 确保 _energy 和 _mood 不超过最大值 10
-        HTNWorld.UpdateState("_energy", Math.Min(energy + 2, 10));
+        HTNWorld.UpdateState("_energy", Math.Min(energy + 4, 10));
         HTNWorld.UpdateState("_mood", Math.Max(mood - 1, 0)); // 心情值不低于 0
         HTNWorld.UpdateState("_masterBeside", false);
     }
@@ -40,7 +45,7 @@ public class P_Sleep : PrimitiveTask
         int mood = (int)worldState["_mood"];
 
         // 确保 _energy 和 _mood 不超过最大值 10
-        worldState["_energy"] = Math.Min(energy + 2, 10);
+        worldState["_energy"] = Math.Min(energy + 4, 10);
         worldState["_mood"] = Math.Max(mood - 1, 0); // 心情值不低于 0
         worldState["_masterBeside"] = false;
     }

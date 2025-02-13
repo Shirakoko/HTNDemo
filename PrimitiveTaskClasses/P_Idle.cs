@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class P_Idle : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "发呆";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         // 无条件执行

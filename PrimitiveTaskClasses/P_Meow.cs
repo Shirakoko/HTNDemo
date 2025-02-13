@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class P_Meow : PrimitiveTask
 {
+    public P_Meow(float duration)
+    {
+        this._duration = duration;
+    }
+
+    public override string GetTaskName()
+    {
+        return "叫唤";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int mood = HTNWorld.GetWorldState<int>("_mood");
@@ -15,14 +25,24 @@ public class P_Meow : PrimitiveTask
     {
         int mood = (int)worldState["_mood"];
         int full = (int)worldState["_full"];
-        return mood >= 8 && full >= 5; // 规划时条件：心情值 >= 8 且饱腹值 >= 5
+        return mood >= 7 && full >= 5; // 规划时条件：心情值 >= 8 且饱腹值 >= 5
     }
 
     public override EStatus Operator()
     {
         // 叫唤任务的执行逻辑（例如动画、耗时等）
-        Debug.Log("叫唤");
-        return EStatus.Success; // 假设直接成功
+        if (_startTime < 0)
+        {
+            _startTime = Time.time;
+            Debug.Log("开始叫唤...");
+        }
+        // 检查是否已满2秒
+        if (Time.time - _startTime >= this._duration)
+        {
+            Debug.Log($"完成{this._duration}秒叫唤");
+            return EStatus.Success;
+        }
+        return EStatus.Running; // 持续中
     }
 
     protected override void Effect_OnRun()
@@ -32,6 +52,7 @@ public class P_Meow : PrimitiveTask
 
         HTNWorld.UpdateState("_mood", Math.Max(mood - 1, 0));
         HTNWorld.UpdateState("_full", Math.Max(full - 1, 0));
+        HTNWorld.UpdateState("_masterBeside", true);
     }
 
     protected override void Effect_OnPlan(Dictionary<string, object> worldState)
@@ -42,6 +63,7 @@ public class P_Meow : PrimitiveTask
 
         // 确保 _mood 不低于最小值 0
         worldState["_mood"] = Math.Max(mood - 1, 0);
-        HTNWorld.UpdateState("_full", Math.Max(full - 1, 0));
+        worldState["_full"] = Math.Max(full - 1, 0);
+        worldState["_masterBeside"] = true;
     }
 }

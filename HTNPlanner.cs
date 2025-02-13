@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HTNPlanner
 {
     //最终分解完成的所有原子任务存放的列表
     public Stack<PrimitiveTask> FinalTasks { get; private set; }
-    //分解过程中，用来缓存被分解出的任务的栈，因为类型各异，故用IBaseTask类型
+    //辅助栈，分解过程中，用来缓存被分解出的任务的栈，因为类型各异，故用IBaseTask类型
     private readonly Stack<IBaseTask> taskOfProcess;
-    private readonly CompoundTask rootTask;//根任务
-    
+    private readonly CompoundTask rootTask; //根任务
+
     public HTNPlanner(CompoundTask rootTask)
     {
         this.rootTask = rootTask;
@@ -56,5 +57,8 @@ public class HTNPlanner
                 FinalTasks.Push(pTask);
             }
         }
+        // 将所有任务名称拼接成一行
+        string taskNames = string.Join(", ", FinalTasks.Select(task => task.GetTaskName()));
+        Debug.Log($"计划完毕：队列中的任务有: {taskNames}");
     }
 }

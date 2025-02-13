@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class P_Parkour : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "跑酷";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         int energy = HTNWorld.GetWorldState<int>("_energy");
         int mood = HTNWorld.GetWorldState<int>("_mood");
-        return energy >= 8 && mood <= 5; // 跑酷条件：精力值 >= 8 且心情值 <= 5
+        return energy >= 5 && mood <= 7; // 跑酷条件：精力值 >= 5 且心情值 <= 7
     }
 
     protected override bool MetCondition_OnPlan(Dictionary<string, object> worldState)
     {
         int energy = (int)worldState["_energy"];
         int mood = (int)worldState["_mood"];
-        return energy >= 8 && mood <= 5; // 规划时条件：精力值 >= 8 且心情值 <= 5
+        return energy >= 5 && mood <= 7; // 规划时条件：精力值 >= 5 且心情值 <= 7
     }
 
     public override EStatus Operator()

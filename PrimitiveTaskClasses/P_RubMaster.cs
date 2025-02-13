@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class P_RubMaster : PrimitiveTask
 {
+    public override string GetTaskName()
+    {
+        return "蹭主人";
+    }
+
     protected override bool MetCondition_OnRun()
     {
         bool masterBeside = HTNWorld.GetWorldState<bool>("_masterBeside");
@@ -28,7 +33,7 @@ public class P_RubMaster : PrimitiveTask
         int mood = HTNWorld.GetWorldState<int>("_mood");
 
         // 确保 _mood 不超过最大值 10
-        HTNWorld.UpdateState("_mood", Math.Min(mood + 2, 10));
+        HTNWorld.UpdateState("_mood", Math.Max(mood - 2, 0));
     }
 
     protected override void Effect_OnPlan(Dictionary<string, object> worldState)
@@ -36,6 +41,6 @@ public class P_RubMaster : PrimitiveTask
         int mood = (int)worldState["_mood"];
 
         // 确保 _mood 不超过最大值 10
-        worldState["_mood"] = Math.Min(mood + 2, 10);
+        worldState["_mood"] = Math.Max(mood - 2, 0);
     }
 }
