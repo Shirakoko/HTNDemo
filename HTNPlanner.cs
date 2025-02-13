@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class HTNPlanner
 {
@@ -14,9 +15,11 @@ public class HTNPlanner
         taskOfProcess = new Stack<IBaseTask>();
         FinalTasks = new Stack<PrimitiveTask>();
     }
+
     //规划（核心）
     public void Plan()
     {
+        Debug.Log("开始计划...");
         //先复制一份世界状态
         var worldState = HTNWorld.CopyWorldState();
         //将存储列表清空，避免上次计划结果的影响

@@ -6,6 +6,7 @@ public enum EStatus
 {
     Failure, Success, Running, 
 }
+
 public interface IBaseTask
 {
     //判断是否满足条件

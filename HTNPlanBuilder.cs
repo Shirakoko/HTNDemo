@@ -4,7 +4,7 @@ public partial class HTNPlanBuilder
 {
     private HTNPlanner planner; 
     private HTNPlanRunner runner;
-    private readonly Stack<IBaseTask> taskStack;
+    private readonly Stack<IBaseTask> taskStack; // 辅助栈，用于构建HTN
     
     public HTNPlanBuilder()
     {
@@ -29,7 +29,7 @@ public partial class HTNPlanBuilder
             taskStack.Push(task);
         }
     }
-    //剩下的代码都很简单，我相信能直接看得懂
+
     public void RunPlan()
     {
         runner.RunPlan();
@@ -44,13 +44,24 @@ public partial class HTNPlanBuilder
         taskStack.Clear();
         return planner;
     }
-    public HTNPlanBuilder CompoundTask()
+
+    // 添加原子任务
+    public HTNPlanBuilder AddPrimitiveTask(PrimitiveTask task)
+    {
+        AddTask(task);
+        return this;
+    }
+
+    // 添加复合任务
+    public HTNPlanBuilder AddCompoundTask()
     {
         var task = new CompoundTask();
         AddTask(task);
         return this;
     }
-    public HTNPlanBuilder Method(System.Func<bool> condition)
+
+    // 添加方法
+    public HTNPlanBuilder AddMethod(System.Func<bool> condition)
     {
         var task = new Method(condition);
         AddTask(task);
