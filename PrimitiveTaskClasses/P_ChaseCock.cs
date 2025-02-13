@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class P_ChaseCock : PrimitiveTask
 {
+    public P_ChaseCock(float duration) : base(duration)
+    {
+    }
+
     public override string GetTaskName()
     {
         return "追蟑螂";
@@ -24,8 +28,20 @@ public class P_ChaseCock : PrimitiveTask
     public override EStatus Operator()
     {
         // 追蟑螂任务的执行逻辑（例如动画、耗时等）
-        Debug.Log("追蟑螂");
-        return EStatus.Success; // 假设直接成功
+        if(_startTime < 0)
+        {
+            _startTime = Time.time;
+            Debug.Log("开始追蟑螂...");
+        }
+
+
+        if(Time.time - _startTime >= this._duration)
+        {
+            Debug.Log($"追蟑螂完毕，耗时{this._duration}");
+            _startTime = -1;
+            return EStatus.Success;
+        }
+        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()

@@ -27,7 +27,7 @@ public class HTNPlanRunner
         } else if(curState == EStatus.Success)
         {
             //如果当前运行状态是成功，就表示当前任务完成了，让当前原子任务造成影响
-            Debug.Log($"任务{curTask.GetTaskName()}执行成功，将对世界状态造成影响");
+            // Debug.Log($"任务{curTask.GetTaskName()}执行成功，将对世界状态造成影响");
             curTask.Effect();
         }
         /*如果当前状态不是「正在执行/EStatus.Running」，就取出新一个原子任务作为当前任务

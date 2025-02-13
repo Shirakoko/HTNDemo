@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class P_Drink : PrimitiveTask
 {
+    public P_Drink(float duration) : base(duration)
+    {
+    }
+
     public override string GetTaskName()
     {
         return "喝水";
@@ -17,8 +21,20 @@ public class P_Drink : PrimitiveTask
     public override EStatus Operator()
     {
         // 喝水任务的执行逻辑（例如动画、耗时等）
-        Debug.Log("喝水");
-        return EStatus.Success; // 假设直接成功
+        if(_startTime < 0)
+        {
+            _startTime = Time.time;
+            Debug.Log("开始喝水...");
+        }
+
+
+        if(Time.time - _startTime >= this._duration)
+        {
+            Debug.Log($"喝水完毕，耗时{this._duration}");
+            _startTime = -1;
+            return EStatus.Success;
+        }
+        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class P_Sleep : PrimitiveTask
 {
+    public P_Sleep(float duration) : base(duration)
+    {
+    }
+
     public override string GetTaskName()
     {
         return "睡觉";
@@ -24,8 +28,20 @@ public class P_Sleep : PrimitiveTask
     public override EStatus Operator()
     {
         // 睡觉任务的执行逻辑（例如动画、耗时等）
-        Debug.Log("睡觉");
-        return EStatus.Success; // 假设直接成功
+        if(_startTime < 0)
+        {
+            _startTime = Time.time;
+            Debug.Log("开始睡觉...");
+        }
+
+
+        if(Time.time - _startTime >= this._duration)
+        {
+            Debug.Log($"睡觉完毕，耗时：{this._duration}");
+            _startTime = -1;
+            return EStatus.Success;
+        }
+        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()

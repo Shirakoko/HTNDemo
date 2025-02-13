@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class P_Meow : PrimitiveTask
 {
-    public P_Meow(float duration)
+    public P_Meow(float duration) : base(duration)
     {
-        this._duration = duration;
     }
 
     public override string GetTaskName()
@@ -31,18 +30,20 @@ public class P_Meow : PrimitiveTask
     public override EStatus Operator()
     {
         // 叫唤任务的执行逻辑（例如动画、耗时等）
-        if (_startTime < 0)
+        if(_startTime < 0)
         {
             _startTime = Time.time;
             Debug.Log("开始叫唤...");
         }
-        // 检查是否已满2秒
-        if (Time.time - _startTime >= this._duration)
+
+
+        if(Time.time - _startTime >= this._duration)
         {
-            Debug.Log($"完成{this._duration}秒叫唤");
+            Debug.Log($"叫唤完毕，耗时{this._duration}");
+            _startTime = -1;
             return EStatus.Success;
         }
-        return EStatus.Running; // 持续中
+        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()

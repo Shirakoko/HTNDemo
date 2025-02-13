@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class P_TestTask : PrimitiveTask
 {
-    public P_TestTask(float duration)
+    public P_TestTask(float duration) : base(duration)
     {
-        this._duration = duration;
     }
 
     public override string GetTaskName()

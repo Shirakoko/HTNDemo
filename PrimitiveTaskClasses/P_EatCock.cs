@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class P_EatCock : PrimitiveTask
 {
+    public P_EatCock(float duration) : base(duration)
+    {
+    }
     public override string GetTaskName()
     {
         return "吃蟑螂";
@@ -24,8 +27,20 @@ public class P_EatCock : PrimitiveTask
     public override EStatus Operator()
     {
         // 吃蟑螂任务的执行逻辑（例如动画、耗时等）
-        Debug.Log("吃蟑螂");
-        return EStatus.Success; // 假设直接成功
+        if(_startTime < 0)
+        {
+            _startTime = Time.time;
+            Debug.Log("开始吃蟑螂...");
+        }
+
+
+        if(Time.time - _startTime >= this._duration)
+        {
+            Debug.Log($"吃蟑螂完毕，耗时{this._duration}");
+            _startTime = -1;
+            return EStatus.Success;
+        }
+        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()
