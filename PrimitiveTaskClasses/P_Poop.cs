@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class P_Poop : PrimitiveTask
 {
-    public P_Poop(float duration) : base(duration)
+    public P_Poop(float duration, TaskStartOperation operation) : base(duration, operation)
     {
         this._task = Task.Poop;
-    }
-    
-    public override string GetTaskName()
-    {
-        return "拉屎";
     }
 
     protected override bool MetCondition_OnRun()
@@ -24,27 +19,6 @@ public class P_Poop : PrimitiveTask
     {
         int full = (int)worldState["_full"];
         return full >= 6; // 规划时条件：饱腹值 >= 6
-    }
-
-    public override EStatus Operator()
-    {
-        // 拉屎任务的执行逻辑（例如动画、耗时等）
-        if(_startTime < 0)
-        {
-            _startTime = Time.time;
-            Debug.Log($"开始{GetTaskName()}...");
-            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
-        }
-
-        if(Time.time - _startTime >= this._duration)
-        {
-            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.HideDialog();
-            _startTime = -1;
-            return EStatus.Success;
-        }
-        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()

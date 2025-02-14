@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class P_Sleep : PrimitiveTask
 {
-    public P_Sleep(float duration) : base(duration)
+    public P_Sleep(float duration, TaskStartOperation operation) : base(duration, operation)
     {
         this._task = Task.Sleep;
-    }
-
-    public override string GetTaskName()
-    {
-        return "睡觉";
     }
 
     protected override bool MetCondition_OnRun()
@@ -24,27 +19,6 @@ public class P_Sleep : PrimitiveTask
     {
         int energy = (int)worldState["_energy"];
         return energy <= 4; // 规划时条件：精力值 <= 4
-    }
-
-    public override EStatus Operator()
-    {
-        // 睡觉任务的执行逻辑（例如动画、耗时等）
-        if(_startTime < 0)
-        {
-            _startTime = Time.time;
-            Debug.Log($"开始{GetTaskName()}...");
-            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
-        }
-
-        if(Time.time - _startTime >= this._duration)
-        {
-            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.HideDialog();
-            _startTime = -1;
-            return EStatus.Success;
-        }
-        return EStatus.Running;
     }
 
     protected override void Effect_OnRun()

@@ -4,41 +4,15 @@ using UnityEngine;
 
 public class P_Drink : PrimitiveTask
 {
-    public P_Drink(float duration) : base(duration)
+    public P_Drink(float duration, TaskStartOperation operation) : base(duration, operation)
     {
         this._task = Task.Drink;
-    }
-
-    public override string GetTaskName()
-    {
-        return "喝水";
     }
 
     // 无条件
     protected override bool MetCondition_OnRun() => true; // 无条件
 
     protected override bool MetCondition_OnPlan(Dictionary<string, object> worldState) => true; // 无条件
-
-    public override EStatus Operator()
-    {
-        // 喝水任务的执行逻辑（例如动画、耗时等）
-        if(_startTime < 0)
-        {
-            _startTime = Time.time;
-            Debug.Log($"开始{GetTaskName()}...");
-            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
-        }
-
-        if(Time.time - _startTime >= this._duration)
-        {
-            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.HideDialog();
-            _startTime = -1;
-            return EStatus.Success;
-        }
-        return EStatus.Running;
-    }
 
     protected override void Effect_OnRun()
     {

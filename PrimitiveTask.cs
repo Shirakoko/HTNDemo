@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
 public enum Task
 {
@@ -14,21 +16,47 @@ public enum Task
     Poop,
     RubMaster,
     Sleep,
+    Test,
 }
+
+public delegate void TaskStartOperation(Task task); // 定义委托类型
 
 public abstract class PrimitiveTask : IBaseTask
 {
     protected Task _task;
     protected float _startTime = -1f;
     protected float _duration = 0.0f;
+    protected TaskStartOperation _operation;
 
-    public PrimitiveTask(float duration)
+    // 任务类型与中文名的映射字典
+    private static readonly Dictionary<Task, string> TaskNameMap = new Dictionary<Task, string>
+    {
+        { Task.ChaseCock, "追蟑螂" },
+        { Task.Destroy, "拆家" },
+        { Task.Drink, "喝水" },
+        { Task.Eat, "吃饭" },
+        { Task.EatCock, "吃蟑螂" },
+        { Task.Idle, "发呆" },
+        { Task.LickFur, "舔毛" },
+        { Task.Meow, "叫唤" },
+        { Task.Parkour, "跑酷" },
+        { Task.Poop, "拉屎" },
+        { Task.RubMaster, "蹭主人" },
+        { Task.Sleep, "睡觉" },
+        { Task.Test, "测试"},
+    };
+
+    public PrimitiveTask(float duration, TaskStartOperation operation)
     {
         this._duration = duration;
+        this._operation = operation;
     }
 
-    // 得到任务的中文名
-    public abstract string GetTaskName();
+    // 获取任务的中文名
+    public string GetTaskName()
+    {
+        return TaskNameMap[_task];
+    }
 
     //原子任务不可以再分解为子任务，所以AddNextTask方法不必实现
     void IBaseTask.AddNextTask(IBaseTask nextTask)
@@ -65,8 +93,29 @@ public abstract class PrimitiveTask : IBaseTask
         return true;
     }
     
-    //任务的具体运行逻辑，交给具体类实现
-    public abstract EStatus Operator();
+    // 任务的具体运行逻辑，交给具体类实现
+    public virtual EStatus Operator()
+    {
+        if(_startTime < 0)
+        {
+            _startTime = Time.time;
+            Debug.Log($"开始{GetTaskName()}...");
+            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
+
+            // UI、动画、音效等，执行任务的具体操作
+            _operation?.Invoke(this._task);
+        }
+
+        if(Time.time - _startTime >= this._duration)
+        {
+            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.HideDialog();
+            _startTime = -1;
+            return EStatus.Success;
+        }
+        return EStatus.Running;
+    }
 
     /// <summary>
     /// 执行成功后的影响，传入null时直接修改HTNWorld
