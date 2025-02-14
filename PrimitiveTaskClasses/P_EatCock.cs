@@ -6,7 +6,9 @@ public class P_EatCock : PrimitiveTask
 {
     public P_EatCock(float duration) : base(duration)
     {
+        this._task = Task.EatCock;
     }
+
     public override string GetTaskName()
     {
         return "吃蟑螂";
@@ -30,13 +32,15 @@ public class P_EatCock : PrimitiveTask
         if(_startTime < 0)
         {
             _startTime = Time.time;
-            Debug.Log("开始吃蟑螂...");
+            Debug.Log($"开始{GetTaskName()}...");
+            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
         }
-
 
         if(Time.time - _startTime >= this._duration)
         {
-            Debug.Log($"吃蟑螂完毕，耗时{this._duration}");
+            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.HideDialog();
             _startTime = -1;
             return EStatus.Success;
         }

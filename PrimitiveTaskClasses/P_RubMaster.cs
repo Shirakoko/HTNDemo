@@ -6,6 +6,7 @@ public class P_RubMaster : PrimitiveTask
 {
     public P_RubMaster(float duration) : base(duration)
     {
+        this._task = Task.RubMaster;
     }
 
     public override string GetTaskName()
@@ -31,13 +32,15 @@ public class P_RubMaster : PrimitiveTask
         if(_startTime < 0)
         {
             _startTime = Time.time;
-            Debug.Log("开始蹭主人...");
+            Debug.Log($"开始{GetTaskName()}...");
+            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
         }
-
 
         if(Time.time - _startTime >= this._duration)
         {
-            Debug.Log($"蹭主人完毕，耗时：{this._duration}");
+            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.HideDialog();
             _startTime = -1;
             return EStatus.Success;
         }

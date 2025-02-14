@@ -6,6 +6,7 @@ public class P_Eat : PrimitiveTask
 {
     public P_Eat(float duration) : base(duration)
     {
+        this._task = Task.Eat;
     }
 
     public override string GetTaskName()
@@ -31,13 +32,15 @@ public class P_Eat : PrimitiveTask
         if(_startTime < 0)
         {
             _startTime = Time.time;
-            Debug.Log("开始吃饭...");
+            Debug.Log($"开始{GetTaskName()}...");
+            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
         }
-
 
         if(Time.time - _startTime >= this._duration)
         {
-            Debug.Log($"吃饭完毕，耗时{this._duration}");
+            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.HideDialog();
             _startTime = -1;
             return EStatus.Success;
         }

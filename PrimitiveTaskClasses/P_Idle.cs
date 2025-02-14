@@ -6,6 +6,7 @@ public class P_Idle : PrimitiveTask
 {
     public P_Idle(float duration) : base(duration)
     {
+        this._task = Task.Idle;
     }
 
     public override string GetTaskName()
@@ -31,13 +32,15 @@ public class P_Idle : PrimitiveTask
         if(_startTime < 0)
         {
             _startTime = Time.time;
-            Debug.Log("开始发呆...");
+            Debug.Log($"开始{GetTaskName()}...");
+            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
         }
-
 
         if(Time.time - _startTime >= this._duration)
         {
-            Debug.Log($"发呆完毕，耗时{this._duration}");
+            Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.HideDialog();
             _startTime = -1;
             return EStatus.Success;
         }

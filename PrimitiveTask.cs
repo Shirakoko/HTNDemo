@@ -1,9 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+
+public enum Task
+{
+    ChaseCock,
+    Destroy,
+    Drink,
+    Eat,
+    EatCock,
+    Idle,
+    LickFur,
+    Meow,
+    Parkour,
+    Poop,
+    RubMaster,
+    Sleep,
+}
 
 public abstract class PrimitiveTask : IBaseTask
 {
+    protected Task _task;
     protected float _startTime = -1f;
     protected float _duration = 0.0f;
 
@@ -12,7 +27,9 @@ public abstract class PrimitiveTask : IBaseTask
         this._duration = duration;
     }
 
+    // 得到任务的中文名
     public abstract string GetTaskName();
+
     //原子任务不可以再分解为子任务，所以AddNextTask方法不必实现
     void IBaseTask.AddNextTask(IBaseTask nextTask)
     {

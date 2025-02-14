@@ -1,13 +1,41 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CatHTN : MonoBehaviour
 {
+    private static CatHTN _instance;
+    public static CatHTN Instance => _instance;
+
+    #region 猫猫的状态
     public int energy;
     public int full;
     public int mood;
     public bool masterBeside;
+    #endregion
+
+    #region
+    private GameObject panelDialogGo;
+    private Text textDialog;
+    #endregion
 
     private HTNPlanBuilder htnBuilder;
+
+    private void Awake()
+    {
+        if(_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
+        panelDialogGo = transform.Find("Canvas").Find("Panel_Dialog").gameObject;
+        textDialog = panelDialogGo.transform.Find("Text_Dialog").GetComponent<Text>();
+
+        panelDialogGo.SetActive(false);
+    }
 
     private void Start()
     {
@@ -19,7 +47,7 @@ public class CatHTN : MonoBehaviour
 
         htnBuilder = new HTNPlanBuilder();
 
-        // 构建猫猫的 HTN
+        // 构建猫猫的 HTN 网络结构
         htnBuilder.AddCompoundTask() // 生活（终极任务）
             .AddMethod(() => true) // 维持生命
                 .AddCompoundTask() // 维持生命复合任务
@@ -59,18 +87,23 @@ public class CatHTN : MonoBehaviour
                 .AddPrimitiveTask(new P_LickFur(3.5f)) // 舔毛
                 .Back()
             .End();
-        
-        // htnBuilder.AddCompoundTask()
-        //     .AddMethod(() => true)
-        //         .AddPrimitiveTask(new P_TestTask(10.0f))
-        //         .Back()
-        //     .End();
-        
-        // InvokeRepeating("RunPlan", 0.0f, 0.0f);
     }
 
     void Update()
     {
+        // 循环执行计划
         htnBuilder.RunPlan();
+    }
+
+    public void ShowDialog(string text)
+    {
+        this.textDialog.text = text;
+        this.panelDialogGo.SetActive(true);
+    }
+
+    public void HideDialog()
+    {
+        this.textDialog.text = "";
+        this.panelDialogGo.SetActive(false);
     }
 }

@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 
 
-//世界状态只有一个即可，我们将其设为静态类
+// 世界状态管理器，使用静态类实现单例模式
 public static class HTNWorld
 {
-    //读 世界状态的字典
+    // 用于读取世界状态的字典，键为状态名，值为获取状态的委托
     private static readonly Dictionary<string, Func<object>> get_WorldState;
-    //写 世界状态的字典
+    // 用于写入世界状态的字典，键为状态名，值为设置状态的委托
     private static readonly Dictionary<string, Action<object>> set_WorldState;
     
     static HTNWorld()
@@ -15,30 +15,64 @@ public static class HTNWorld
         get_WorldState = new Dictionary<string, Func<object>>();
         set_WorldState = new Dictionary<string, Action<object>>();
     }
-    //添加一个状态，需要传入状态名、读取函数和写入函数
+
+    /// <summary>
+    /// 添加一个世界状态
+    /// </summary>
+    /// <param name="key">状态名称</param>
+    /// <param name="getter">获取状态值的委托</param>
+    /// <param name="setter">设置状态值的委托</param>
     public static void AddState(string key, Func<object> getter, Action<object> setter)
     {
         get_WorldState[key] = getter;
         set_WorldState[key] = setter;
     }
-    //根据状态名移除某个世界状态
+
+    /// <summary>
+    /// 移除一个世界状态
+    /// </summary>
+    /// <param name="key">状态名称</param>
     public static void RemoveState(string key)
     {
         get_WorldState.Remove(key);
         set_WorldState.Remove(key);
     }
-    //修改某个状态的值
+
+    /// <summary>
+    /// 更新某个状态的值
+    /// </summary>
+    /// <param name="key">状态名称</param>
+    /// <param name="value">新的状态值</param>
     public static void UpdateState(string key, object value)
     {
-        //就是通过写入字典修改的
-        set_WorldState[key].Invoke(value);
+        if (set_WorldState.ContainsKey(key))
+        {
+            set_WorldState[key].Invoke(value);
+        }
     }
-    //读取某个状态的值，利用泛型，可以将获取的object转为指定的类型
+
+    /// <summary>
+    /// 获取某个状态的值，并转换为指定类型
+    /// </summary>
+    /// <typeparam name="T">目标类型</typeparam>
+    /// <param name="key">状态名称</param>
+    /// <returns>状态值</returns>
     public static T GetWorldState<T>(string key) 
     {
-        return (T)get_WorldState[key].Invoke();
+        if (get_WorldState.ContainsKey(key))
+        {
+            return (T)get_WorldState[key].Invoke();
+        }
+        else
+        {
+            throw new KeyNotFoundException($"状态 '{key}' 未找到。");
+        }
     }
-    //复制一份当前世界状态的值（这个主要是用在规划中）
+
+    /// <summary>
+    /// 复制当前世界状态，生成一个快照
+    /// </summary>
+    /// <returns>包含所有状态名称和值的字典</returns>
     public static Dictionary<string, object> CopyWorldState()
     {
         var copy = new Dictionary<string, object>();
