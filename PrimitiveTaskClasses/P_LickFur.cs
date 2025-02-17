@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class P_LickFur : PrimitiveTask
 {
-    public P_LickFur(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_LickFur(float duration) : base(duration)
     {
         this._task = Task.LickFur;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class P_ChaseCock : PrimitiveTask
 {
-    public P_ChaseCock(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_ChaseCock(float duration) : base(duration)
     {
         this._task = Task.ChaseCock;
     }

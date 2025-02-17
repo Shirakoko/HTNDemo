@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public class P_TestTask : PrimitiveTask
 {
-    public P_TestTask(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_TestTask(float duration) : base(duration)
     {
         this._task = Task.Test;
     }

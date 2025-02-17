@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class P_Idle : PrimitiveTask
 {
-    public P_Idle(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_Idle(float duration) : base(duration)
     {
         this._task = Task.Idle;
     }

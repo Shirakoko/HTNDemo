@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class P_Parkour : PrimitiveTask
 {
-    public P_Parkour(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_Parkour(float duration) : base(duration)
     {
         this._task = Task.Parkour;
     }

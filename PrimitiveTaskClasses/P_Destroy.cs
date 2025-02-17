@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
 public class P_Destroy : PrimitiveTask
 {
-    public P_Destroy(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_Destroy(float duration) : base(duration)
     {
         this._task = Task.Destroy;
     }

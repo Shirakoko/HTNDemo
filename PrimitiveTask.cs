@@ -19,14 +19,15 @@ public enum Task
     Test,
 }
 
-public delegate void TaskStartOperation(Task task); // 定义委托类型
+// public delegate void TaskStartOperation(Task task); // 定义委托类型
 
 public abstract class PrimitiveTask : IBaseTask
 {
     protected Task _task;
     protected float _startTime = -1f;
     protected float _duration = 0.0f;
-    protected TaskStartOperation _operation;
+    private bool _isMoving;
+    // protected TaskStartOperation _operation;
 
     // 任务类型与中文名的映射字典
     private static readonly Dictionary<Task, string> TaskNameMap = new Dictionary<Task, string>
@@ -46,10 +47,10 @@ public abstract class PrimitiveTask : IBaseTask
         { Task.Test, "测试"},
     };
 
-    public PrimitiveTask(float duration, TaskStartOperation operation)
+    public PrimitiveTask(float duration)
     {
         this._duration = duration;
-        this._operation = operation;
+        // this._operation = operation;
     }
 
     // 获取任务的中文名
@@ -96,24 +97,41 @@ public abstract class PrimitiveTask : IBaseTask
     // 任务的具体运行逻辑，交给具体类实现
     public virtual EStatus Operator()
     {
-        if(_startTime < 0)
+        if (_startTime < 0)
         {
-            _startTime = Time.time;
-            Debug.Log($"开始{GetTaskName()}...");
-            CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
+            if (_isMoving)
+            {
+                // 如果正在移动，返回 Running 状态
+                return EStatus.Running;
+            }
 
-            // UI、动画、音效等，执行任务的具体操作
-            _operation?.Invoke(this._task);
+            // 开始移动
+            _isMoving = true;
+            CatHTN.Instance.MoveToNextPosition(this._task, () =>
+            {
+                // 移动完成后，设置 _startTime 并执行任务逻辑
+                _startTime = Time.time;
+                Debug.Log($"开始{GetTaskName()}...");
+                CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
+
+                this.TaskStartOperation();
+                _isMoving = false; // 移动完成
+            });
+
+            return EStatus.Running;
         }
 
-        if(Time.time - _startTime >= this._duration)
+        // 如果任务已经完成，返回 Success 状态
+        if (Time.time - _startTime >= this._duration)
         {
             Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
             CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
             CatHTN.Instance.HideDialog();
-            _startTime = -1;
+            _startTime = -1; // 重置计时器
             return EStatus.Success;
         }
+
+        // 任务正在执行中
         return EStatus.Running;
     }
 
@@ -132,5 +150,10 @@ public abstract class PrimitiveTask : IBaseTask
     protected virtual void Effect_OnRun()
     {
         ;
+    }
+
+    protected virtual void TaskStartOperation()
+    {
+        // CatHTN.Instance.PlayAnim(this._task);
     }
 }

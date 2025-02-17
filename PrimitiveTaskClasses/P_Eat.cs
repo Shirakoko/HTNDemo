@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class P_Eat : PrimitiveTask
 {
-    public P_Eat(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_Eat(float duration) : base(duration)
     {
         this._task = Task.Eat;
     }

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class P_Meow : PrimitiveTask
 {
-    public P_Meow(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_Meow(float duration) : base(duration)
     {
         this._task = Task.Meow;
     }

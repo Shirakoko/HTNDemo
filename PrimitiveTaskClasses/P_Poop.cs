@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class P_Poop : PrimitiveTask
 {
-    public P_Poop(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_Poop(float duration) : base(duration)
     {
         this._task = Task.Poop;
     }

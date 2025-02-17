@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class P_RubMaster : PrimitiveTask
 {
-    public P_RubMaster(float duration, TaskStartOperation operation) : base(duration, operation)
+    public P_RubMaster(float duration) : base(duration)
     {
         this._task = Task.RubMaster;
     }
