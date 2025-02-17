@@ -71,20 +71,21 @@ public abstract class PrimitiveTask : IBaseTask
     /// <param name="worldState">用于plan的世界状态副本</param>
     public bool MetCondition(Dictionary<string, object> worldState = null)
     {
-        if(worldState == null)//实际运行时
+        if (worldState == null)
         {
+            // 运行时直接检查真实世界状态
             return MetCondition_OnRun();
         }
-        else//模拟规划时，若能满足条件就直接进行Effect
+        
+        // 规划时检查副本状态，若条件满足则立即应用效果
+        if (MetCondition_OnPlan(worldState))
         {
-            if(MetCondition_OnPlan(worldState))
-            {
-                Effect_OnPlan(worldState);
-                return true;
-            }
-            return false;
+            Effect_OnPlan(worldState);
+            return true;
         }
+        return false;
     }
+
     protected virtual bool MetCondition_OnPlan(Dictionary<string, object> worldState)
     {
         return true;
@@ -135,22 +136,17 @@ public abstract class PrimitiveTask : IBaseTask
         return EStatus.Running;
     }
 
-    /// <summary>
-    /// 执行成功后的影响，传入null时直接修改HTNWorld
-    /// </summary>
-    /// <param name="worldState">用于plan的世界状态副本</param>
-    public void Effect(Dictionary<string, object> worldState = null)
+    //执行成功后的影响
+    public void Effect()
     {
         Effect_OnRun();
     }
-    protected virtual void Effect_OnPlan(Dictionary<string, object> worldState)
-    {
-        ;
-    }
-    protected virtual void Effect_OnRun()
-    {
-        ;
-    }
+    
+    // 规划模式效果应用（子类可覆盖）
+    protected virtual void Effect_OnPlan(Dictionary<string, object> worldState) { }
+
+    // 运行时效果应用（子类可覆盖）
+    protected virtual void Effect_OnRun() { }
 
     protected virtual void TaskStartOperation()
     {

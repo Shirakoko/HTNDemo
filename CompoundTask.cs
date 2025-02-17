@@ -2,8 +2,9 @@ using System.Collections.Generic;
 
 public class CompoundTask : IBaseTask
 {
-    // 选中的方法
+    // 当前选中的有效方法
     public Method ValidMethod { get; private set; }
+
     // 子任务（方法）列表
     private readonly List<Method> methods;
 
@@ -12,16 +13,53 @@ public class CompoundTask : IBaseTask
         methods = new List<Method>();
     }
 
+    /// <summary>
+    /// 添加子任务（仅支持添加方法）
+    /// </summary>
+    /// <param name="nextTask">待添加的任务</param>
     public void AddNextTask(IBaseTask nextTask)
     {
-        // 要判断添加进来的是不是方法类，是的话才添加
-        if (nextTask is Method m)
+        // 检查任务类型，仅添加方法
+        if (nextTask is Method method)
         {
-            methods.Add(m);
+            methods.Add(method);
         }
     }
 
-    public bool MetCondition(Dictionary<string, object> worldState)
+    /// <summary>
+    /// 检查复合任务是否满足条件（顺序选择逻辑）
+    /// </summary>
+    /// <param name="worldState">世界状态</param>
+    /// <returns>
+    /// true：至少有一个方法满足条件
+    /// false：所有方法均不满足条件
+    /// </returns>
+    public bool MetCondition_Sequential(Dictionary<string, object> worldState)
+    {
+        // 遍历所有方法，按顺序检查条件
+        for (int i = 0; i < methods.Count; ++i)
+        {
+            if (methods[i].MetCondition(worldState))
+            {
+                // 记录第一个满足条件的方法
+                ValidMethod = methods[i];
+                return true;
+            }
+        }
+
+        // 没有方法满足条件
+        return false;
+    }
+
+    /// <summary>
+    /// 检查复合任务是否满足条件（随机选择逻辑）
+    /// </summary>
+    /// <param name="worldState">世界状态</param>
+    /// <returns>
+    /// true：至少有一个方法满足条件
+    /// false：所有方法均不满足条件
+    /// </returns>
+    public bool MetCondition_Random(Dictionary<string, object> worldState)
     {
         // 收集所有满足条件的方法
         var validMethods = new List<Method>();
@@ -41,7 +79,19 @@ public class CompoundTask : IBaseTask
             return true;
         }
 
-        // 如果没有满足条件的方法，则返回 false
+        // 没有方法满足条件
         return false;
+    }
+
+    /// <summary>
+    /// 默认的条件检查方法（可根据需求选择顺序或随机逻辑）
+    /// </summary>
+    public bool MetCondition(Dictionary<string, object> worldState)
+    {
+        // 默认使用顺序选择逻辑
+        // return MetCondition_Sequential(worldState);
+
+        // 如果需要随机选择逻辑，可以改为：
+        return MetCondition_Random(worldState);
     }
 }
