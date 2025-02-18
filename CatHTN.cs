@@ -89,7 +89,7 @@ public class CatHTN : MonoBehaviour
         HTNWorld.AddState("_energy", () => energy, value => energy = (int)value);
         HTNWorld.AddState("_mood", () => mood, value => mood = (int)value);
         HTNWorld.AddState("_full", () => full, value => full = (int)value);
-        // masterBeside状态会影响游戏物体的显隐
+        // masterBeside状态会影响游戏物体_masterGo的显隐
         HTNWorld.AddState("_masterBeside", () => masterBeside, value => {masterBeside = (bool)value; _masterGo.SetActive(masterBeside); });
 
         htnBuilder = new HTNPlanBuilder();

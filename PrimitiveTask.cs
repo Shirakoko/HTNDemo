@@ -27,7 +27,6 @@ public abstract class PrimitiveTask : IBaseTask
     protected float _startTime = -1f;
     protected float _duration = 0.0f;
     private bool _isMoving;
-    // protected TaskStartOperation _operation;
 
     // 任务类型与中文名的映射字典
     private static readonly Dictionary<Task, string> TaskNameMap = new Dictionary<Task, string>
@@ -95,7 +94,7 @@ public abstract class PrimitiveTask : IBaseTask
         return true;
     }
     
-    // 任务的具体运行逻辑，交给具体类实现
+    // 任务的具体运行逻辑
     public virtual EStatus Operator()
     {
         if (_startTime < 0)
@@ -115,7 +114,7 @@ public abstract class PrimitiveTask : IBaseTask
                 Debug.Log($"开始{GetTaskName()}...");
                 CatHTN.Instance.ShowDialog($"开始{GetTaskName()}...");
 
-                this.TaskStartOperation();
+                this.TaskStartOperation(); // 调用任务开始方法（材质、UI、特效、音效等）
                 _isMoving = false; // 移动完成
             });
 
@@ -125,7 +124,7 @@ public abstract class PrimitiveTask : IBaseTask
         // 如果任务已经完成，返回 Success 状态
         if (Time.time - _startTime >= this._duration)
         {
-            this.TaskEndOperation();
+            this.TaskEndOperation(); // 调用任务结束方法（材质、UI、特效、音效等）
 
             Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
             CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
@@ -151,12 +150,12 @@ public abstract class PrimitiveTask : IBaseTask
     protected virtual void Effect_OnRun() { }
 
     /// <summary>
-    /// 任务开始操作
+    /// 任务开始操作，子类可覆写
     /// </summary>
     protected virtual void TaskStartOperation() {}
 
     /// <summary>
-    /// 任务结束操作
+    /// 任务结束操作，子类可覆写
     /// </summary>
     protected virtual void TaskEndOperation() {}
 }
