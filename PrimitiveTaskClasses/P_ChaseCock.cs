@@ -44,4 +44,16 @@ public class P_ChaseCock : PrimitiveTask
         worldState["_full"] = Math.Max(full - 2, 0);
         worldState["_mood"] = Math.Min(mood + 1, 10);
     }
+
+    protected override void TaskStartOperation()
+    {
+        // 出现蟑螂
+        CatHTN.Instance.CockGo.SetActive(true);
+    }
+
+    protected override void TaskEndOperation()
+    {
+        // 隐藏蟑螂
+        CatHTN.Instance.CockGo.SetActive(false);
+    }
 }

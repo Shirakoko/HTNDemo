@@ -125,6 +125,8 @@ public abstract class PrimitiveTask : IBaseTask
         // 如果任务已经完成，返回 Success 状态
         if (Time.time - _startTime >= this._duration)
         {
+            this.TaskEndOperation();
+
             Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
             CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
             CatHTN.Instance.HideDialog();
@@ -148,8 +150,13 @@ public abstract class PrimitiveTask : IBaseTask
     // 运行时效果应用（子类可覆盖）
     protected virtual void Effect_OnRun() { }
 
-    protected virtual void TaskStartOperation()
-    {
-        // CatHTN.Instance.PlayAnim(this._task);
-    }
+    /// <summary>
+    /// 任务开始操作
+    /// </summary>
+    protected virtual void TaskStartOperation() {}
+
+    /// <summary>
+    /// 任务结束操作
+    /// </summary>
+    protected virtual void TaskEndOperation() {}
 }

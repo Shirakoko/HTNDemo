@@ -20,13 +20,19 @@ public class CatHTN : MonoBehaviour
     public float moveSpeed = 2.0f;
 
     #region UI
-    private GameObject panelDialogGo;
-    private Text textDialog;
+    private GameObject _panelDialogGo;
+    private Text _textDialog;
+    #endregion
+
+    #region 其他角色
+    private GameObject _cockGo;
+    public GameObject CockGo => _cockGo;
     #endregion
 
     private Animator animator;
+    private Dictionary<Task, AnimationClip> clipDict;
 
-    // 存储任务类型和对应位置的字典
+    // 存储任务类型和任务执行位置的字典
     private Dictionary<Task, Vector3> _taskPositions = new Dictionary<Task, Vector3>();
 
     private HTNPlanBuilder htnBuilder;
@@ -42,12 +48,25 @@ public class CatHTN : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        panelDialogGo = transform.Find("Cat").Find("Canvas").Find("Panel_Dialog").gameObject;
-        textDialog = panelDialogGo.transform.Find("Text_Dialog").GetComponent<Text>();
+        // 初始化UI
+        _panelDialogGo = transform.Find("Cat").Find("Canvas").Find("Panel_Dialog").gameObject;
+        _textDialog = _panelDialogGo.transform.Find("Text_Dialog").GetComponent<Text>();
+        _panelDialogGo.SetActive(false);
 
-        panelDialogGo.SetActive(false);
+        _cockGo = transform.Find("Cat").Find("Cock").gameObject;
 
         animator = transform.Find("Cat").GetComponent<Animator>();
+        clipDict = new Dictionary<Task, AnimationClip>();
+
+        // 遍历动画片段，加入字典
+        foreach(AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+        {
+            Task result;
+            if(Enum.TryParse<Task>(clip.name, out result))
+            {
+                clipDict.Add(result, clip);
+            }
+        }
     }
 
     private void Start()
@@ -122,25 +141,22 @@ public class CatHTN : MonoBehaviour
 
     public void ShowDialog(string text)
     {
-        this.textDialog.text = text;
-        this.panelDialogGo.SetActive(true);
+        this._textDialog.text = text;
+        this._panelDialogGo.SetActive(true);
     }
 
     public void HideDialog()
     {
-        this.textDialog.text = "";
-        this.panelDialogGo.SetActive(false);
-    }
-
-    public void TaskStart(Task task)
-    {
-        // 播放动画，UI，音效等
+        this._textDialog.text = "";
+        this._panelDialogGo.SetActive(false);
     }
 
     public void MoveToNextPosition(Task task, Action finishAction)
     {
         if (_taskPositions.TryGetValue(task, out Vector3 position))
         {
+            // 先停止动画
+            animator.Play("Empty");
             // 计算当前位置和目标位置之间的距离
             float distance = Vector3.Distance(this.transform.position, position);
             // 根据距离和速度计算移动时间
@@ -149,15 +165,23 @@ public class CatHTN : MonoBehaviour
             this.transform.DOMove(position, moveTime).OnComplete(() => {
                 // 完成之后执行的函数
                 finishAction?.Invoke();
+                PlayAnim(task);
             });
         } else {
             finishAction?.Invoke();
+            PlayAnim(task);
         }
     }
 
     public void PlayAnim(Task task)
     {
-        // 播放动画，动画片段名称和task相同，动画控制器就挂在该游戏物体上
-        animator.Play(task.ToString());
+        if(clipDict.ContainsKey(task))
+        {
+            animator.Play(task.ToString());
+        }
+        else
+        {
+            animator.Play("Empty");
+        }
     }
 }
