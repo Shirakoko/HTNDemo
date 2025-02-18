@@ -27,6 +27,7 @@ public class CatHTN : MonoBehaviour
     #region 其他角色
     private GameObject _cockGo;
     public GameObject CockGo => _cockGo;
+    private GameObject _masterGo;
     #endregion
 
     private Animator animator;
@@ -54,6 +55,7 @@ public class CatHTN : MonoBehaviour
         _panelDialogGo.SetActive(false);
 
         _cockGo = transform.Find("Cat").Find("Cock").gameObject;
+        _masterGo = transform.Find("Master").gameObject;
 
         animator = transform.Find("Cat").GetComponent<Animator>();
         clipDict = new Dictionary<Task, AnimationClip>();
@@ -87,7 +89,8 @@ public class CatHTN : MonoBehaviour
         HTNWorld.AddState("_energy", () => energy, value => energy = (int)value);
         HTNWorld.AddState("_mood", () => mood, value => mood = (int)value);
         HTNWorld.AddState("_full", () => full, value => full = (int)value);
-        HTNWorld.AddState("_masterBeside", () => masterBeside, value => masterBeside = (bool)value);
+        // masterBeside状态会影响游戏物体的显隐
+        HTNWorld.AddState("_masterBeside", () => masterBeside, value => {masterBeside = (bool)value; _masterGo.SetActive(masterBeside); });
 
         htnBuilder = new HTNPlanBuilder();
 
