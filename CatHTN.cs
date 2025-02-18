@@ -84,7 +84,12 @@ public class CatHTN : MonoBehaviour
                 _taskPositions[task] = child.position;
             }
         }
-
+        // 初始化世界状态
+        InitWorldState();
+        if(masterBeside) {
+            this._masterGo.SetActive(true);
+        }
+        
         // 注册世界状态
         HTNWorld.AddState("_energy", () => energy, value => energy = (int)value);
         HTNWorld.AddState("_mood", () => mood, value => mood = (int)value);
@@ -140,6 +145,14 @@ public class CatHTN : MonoBehaviour
     {
         // 循环执行计划
         htnBuilder.RunPlan();
+    }
+
+    private void InitWorldState()
+    {
+        this.energy = GameManager.Instance.Energy;
+        this.full = GameManager.Instance.Full;
+        this.mood = GameManager.Instance.Mood;
+        this.masterBeside = GameManager.Instance.MasterBeside;
     }
 
     public void ShowDialog(string text)
