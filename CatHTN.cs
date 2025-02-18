@@ -102,7 +102,7 @@ public class CatHTN : MonoBehaviour
                         .AddPrimitiveTask(new P_Eat(3.0f))  // 吃饭
                         .AddPrimitiveTask(new P_Drink(2.0f)) // 喝水
                         .Back()
-                    .AddMethod(() => true) // 拉屎
+                    .AddMethod(() => true) // 排泄
                         .AddPrimitiveTask(new P_Poop(5.0f)) // 拉屎
                         .Back()
                     .Back()
@@ -120,7 +120,7 @@ public class CatHTN : MonoBehaviour
                     .Back()
                 .Back()
             .AddMethod(() => true) // 叫唤
-                .AddPrimitiveTask(new P_Meow(2.0f)) // 叫唤
+                .AddPrimitiveTask(new P_Meow(3.0f)) // 叫唤
                 .Back()
             .AddMethod(() => HTNWorld.GetWorldState<bool>("_masterBeside")) // 撒娇
                 .AddPrimitiveTask(new P_RubMaster(4.0f)) // 蹭主人
@@ -130,7 +130,7 @@ public class CatHTN : MonoBehaviour
                 .AddPrimitiveTask(new P_Sleep(7.0f)) // 睡觉
                 .AddPrimitiveTask(new P_Idle(2.5f)) // 发呆
                 .Back()
-            .AddMethod(() => true)
+            .AddMethod(() => true) // 清洁
                 .AddPrimitiveTask(new P_LickFur(3.5f)) // 舔毛
                 .Back()
             .End();
