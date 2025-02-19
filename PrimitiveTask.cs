@@ -127,7 +127,7 @@ public abstract class PrimitiveTask : IBaseTask
             this.TaskEndOperation(); // 调用任务结束方法（材质、UI、特效、音效等）
 
             Debug.Log($"{GetTaskName()}完毕，耗时{this._duration}");
-            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}");
+            CatHTN.Instance.ShowDialog($"{GetTaskName()}完毕，耗时{this._duration}s");
             CatHTN.Instance.HideDialog();
             _startTime = -1; // 重置计时器
             return EStatus.Success;
