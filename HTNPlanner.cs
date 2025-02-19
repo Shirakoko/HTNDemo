@@ -60,5 +60,6 @@ public class HTNPlanner
         
         string taskNames = string.Join(", ", FinalTasks.Select(task => task.GetTaskName()));
         Debug.Log($"计划完毕，队列中的任务有: {taskNames}");
+        CatHTN.Instance.SetStateText($"计划完毕，队列中的任务有: {taskNames}");
     }
 }

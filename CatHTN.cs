@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Diagnostics;
 
 public class CatHTN : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class CatHTN : MonoBehaviour
     #region UI
     private GameObject _panelDialogGo;
     private Text _textDialog;
+    public Text _textState;
     #endregion
 
     #region 其他角色
@@ -53,6 +55,8 @@ public class CatHTN : MonoBehaviour
         _panelDialogGo = transform.Find("Cat").Find("Canvas").Find("Panel_Dialog").gameObject;
         _textDialog = _panelDialogGo.transform.Find("Text_Dialog").GetComponent<Text>();
         _panelDialogGo.SetActive(false);
+
+        _textState = GameObject.Find("Canvas/Panel_Home/Img_State/Text_State").GetComponent<Text>();
 
         _cockGo = transform.Find("Cat").Find("Cock").gameObject;
         _masterGo = transform.Find("Master").gameObject;
@@ -199,5 +203,10 @@ public class CatHTN : MonoBehaviour
         {
             animator.Play("Empty");
         }
+    }
+
+    public void SetStateText(string text)
+    {
+        _textState.text = text;
     }
 }
