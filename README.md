@@ -18,7 +18,7 @@
 
 ### 1. 下载 Windows 版本
 
-从 Releases 下载 Windows 版本，解压后双击运行可执行文件 HTNDemo.exe 即可。//TODO
+从 Releases 下载 Windows 版本：[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Shirakoko/HTNSimulateDemo)](https://github.com/yourusername/Shirakoko/HTNSimulateDemo/latest)，解压后双击运行可执行文件 HTNSimulateDemo.exe 即可。//TODO
 
 ### 2. 在线运行 WebGL 版本
 
