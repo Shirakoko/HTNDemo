@@ -24,6 +24,8 @@
 
 访问 itch.io，直接在浏览器中运行 WebGL 版本：[HTNSimulateDemo by Yuki](https://yukilovesgames.itch.io/htnsimulatedemo)
 
+------
+
 ## 后续优化
 
 ### 1. 配置文件驱动的 HTN 网络生成
