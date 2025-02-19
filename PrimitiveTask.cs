@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public enum Task
 {
@@ -16,10 +15,7 @@ public enum Task
     Poop,
     RubMaster,
     Sleep,
-    Test,
 }
-
-// public delegate void TaskStartOperation(Task task); // 定义委托类型
 
 public abstract class PrimitiveTask : IBaseTask
 {
@@ -43,7 +39,6 @@ public abstract class PrimitiveTask : IBaseTask
         { Task.Poop, "拉屎" },
         { Task.RubMaster, "蹭主人" },
         { Task.Sleep, "睡觉" },
-        { Task.Test, "测试"},
     };
 
     public PrimitiveTask(float duration)
