@@ -32,6 +32,86 @@
 
 目前的世界状态、任务条件和HTN网络结构都是写死在代码里的；后续可通过JSON或YAML配置文件动态生成HTN网络（包括**世界状态定义**、**原子任务类**、**HTN网络构建**的代码），支持用户定义世界状态、任务和条件，自动生成原子任务具体类和网络结构，提升灵活性和可维护性。
 
+例如，通过以下json对象：
+
+```json
+{
+  "name": "Bat",
+  "cnName": "打人",
+  "conditions": [
+      {
+          "field": "_mood",
+          "type": "int",
+          "expression": "<= 3"
+      },
+      {
+          "field": "_masterBeside",
+          "type": "bool",
+          "expression": "== true"
+      }
+  ],
+  "effects": [
+      { 
+          "field": "_mood", 
+          "operation": "+", 
+          "value": "1" 
+      },
+      { 
+          "field": "_masterBeside", 
+          "operation": "=", 
+          "value": "false" 
+      }
+  ]
+}
+```
+
+生成`P_Bat.cs`原子任务类脚本：
+
+```csharp
+using System;
+using System.Collections.Generic;
+
+public class P_Bat : PrimitiveTask
+{
+    public P_Bat(float duration) : base(duration)
+    {
+        this._task = Task.Bat;
+    }
+
+    protected override bool MetCondition_OnRun()
+    {
+        return HTNWorld.GetWorldState<int>("_mood") <= 3 && HTNWorld.GetWorldState<bool>("_masterBeside") == true;
+    }
+
+    protected override bool MetCondition_OnPlan(Dictionary<string, object> worldState)
+    {
+        return (int)worldState["_mood"] <= 3 && (bool)worldState["_masterBeside"] == true;
+    }
+
+    protected override void Effect_OnRun()
+    {
+        HTNWorld.UpdateState("_mood", Math.Clamp(HTNWorld.GetWorldState<int>("_mood") + 1, 0, 10));
+        HTNWorld.UpdateState("_masterBeside", false);
+
+    }
+
+    protected override void Effect_OnPlan(Dictionary<string, object> worldState)
+    {
+        worldState["_mood"] = Math.Clamp((int)worldState["_mood"] + 1, 0, 10);
+        worldState["_masterBeside"] = false;
+
+    }
+}
+```
+
+部分功能已实现：
+
+
+生成工具：[PrimitiveTaskGenerator-Shirakoko/HTNSimulateDemo](https://github.com/Shirakoko/HTNSimulateDemo/tree/Assets/Editor/PrimitiveTaskGenerator)
+
+配置文件：[Configs-Shirakoko/HTNSimulateDemo](https://github.com/Shirakoko/HTNSimulateDemo/tree/Assets/Configs)
+
+
 ### 2.动态世界状态管理
 
 引入动态世界状态机制（昼夜交替、饱腹度随时间流逝等），支持游戏进程自动更新状态，且允许用户通过配置文件或编辑器动态添加、修改、删除变量，增强HTN网络的适应性。
